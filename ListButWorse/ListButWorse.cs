@@ -24,7 +24,6 @@ namespace ListButWorse
 
             Count = 0;
             _values = _emptyArray;
-
             using IEnumerator<T> enumerator = enumerable.GetEnumerator();
 
             while (enumerator.MoveNext())
@@ -119,7 +118,6 @@ namespace ListButWorse
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             ArgumentNullException.ThrowIfNull(item);
-
             IncreaseSizeIfNeeded();
 
             if (index < Count)
@@ -135,9 +133,7 @@ namespace ListButWorse
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             Count--;
-
             Array.Copy(_values, index + 1, _values, index, Count - index);
-
             _values[Count] = default(T);
 
             if (Count < _values.Length / 2)
@@ -193,7 +189,6 @@ namespace ListButWorse
             }
 
             public T Current { get; private set; }
-
 
             readonly object System.Collections.IEnumerator.Current => Current;
         }
