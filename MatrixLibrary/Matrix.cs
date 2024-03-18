@@ -242,9 +242,12 @@ namespace MatrixLibrary
 
             public Enumerator(Matrix<T> matrix)
             {
-                index = new(0, 0);
-                index.MaxX = matrix.Values.GetLength(0) - 1;
-                index.MaxY = matrix.Values.GetLength(1) - 1;
+                index = new(0, 0)
+                {
+                    MaxX = matrix.Values.GetLength(0) - 1,
+                    MaxY = matrix.Values.GetLength(1) - 1
+                };
+
                 Current = matrix[index.X, index.Y];
                 this.matrix = matrix;
             }
