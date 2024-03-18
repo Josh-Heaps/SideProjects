@@ -178,6 +178,120 @@ namespace MatrixLibrary
         }
 
         /// <summary>
+        /// Adds <paramref name="scalar"/> to every value in <paramref name="matrix"/>.
+        /// </summary>
+        /// <param name="matrix">The first matrix to add.</param>
+        /// <param name="scalar">The scalar value to add to the matrix.</param>
+        /// <returns>The result of adding the scalar to the matrix.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static T[,] Add(T[,] matrix, T scalar)
+        {
+            ArgumentNullException.ThrowIfNull(matrix);
+
+            int firstMatrixRowCount = matrix.GetLength(0);
+            int firstMatrixColumnCount = matrix.GetLength(1);
+
+            T[,] resultMatrix = new T[firstMatrixRowCount, firstMatrixColumnCount];
+
+            for (int i = 0; i < firstMatrixRowCount; i++)
+            {
+                for (int j = 0; j < firstMatrixColumnCount; j++)
+                {
+                    resultMatrix[i, j] = matrix[i, j] + scalar;
+                }
+            }
+
+            return resultMatrix;
+        }
+
+        /// <summary>
+        /// Adds <paramref name="scalar"/> to every value in <paramref name="matrix"/>.
+        /// </summary>
+        /// <param name="matrix">The first matrix to add.</param>
+        /// <param name="scalar">The scalar value to add to the matrix.</param>
+        /// <returns>The result of adding the scalar to the matrix.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static T[][] Add(T[][] matrix, T scalar)
+        {
+            ArgumentNullException.ThrowIfNull(matrix);
+
+            return ConvertToArrayOfArrays(Add(ConvertToTwoDimensionalArray(matrix), scalar));
+        }
+
+        /// <summary>
+        /// Subtracts the <paramref name="secondMatrix"/> from the <paramref name="firstMatrix"/>.
+        /// </summary>
+        /// <param name="firstMatrix">The matrix to subtract from.</param>
+        /// <param name="secondMatrix">The matrix to subtract.</param>
+        /// <returns>The result of subtracting the <paramref name="secondMatrix"/> from the <paramref name="firstMatrix"/>.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static T[,] Subtract(T[,] firstMatrix, T[,] secondMatrix)
+        {
+            ArgumentNullException.ThrowIfNull(firstMatrix);
+            ArgumentNullException.ThrowIfNull(secondMatrix);
+
+            if (firstMatrix.GetLength(0) != secondMatrix.GetLength(0)
+             || firstMatrix.GetLength(1) != secondMatrix.GetLength(1))
+                throw new InvalidOperationException("Matrix size mismatch. Matrices must be the exact same size.");
+
+            return Add(firstMatrix, Multiply(secondMatrix, -T.One));
+        }
+
+        /// <summary>
+        /// Subtracts the <paramref name="secondMatrix"/> from the <paramref name="firstMatrix"/>.
+        /// </summary>
+        /// <param name="firstMatrix">The matrix to subtract from.</param>
+        /// <param name="secondMatrix">The matrix to subtract.</param>
+        /// <returns>The result of subtracting the <paramref name="secondMatrix"/> from the <paramref name="firstMatrix"/>.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static T[][] Subtract(T[][] firstMatrix, T[][] secondMatrix)
+        {
+            ArgumentNullException.ThrowIfNull(firstMatrix);
+            ArgumentNullException.ThrowIfNull(secondMatrix);
+            T[,] convertedFirstMatrix = ConvertToTwoDimensionalArray(firstMatrix);
+            T[,] convertedSecondMatrix = ConvertToTwoDimensionalArray(secondMatrix);
+            T[,] convertedResultMatrix = Subtract(convertedFirstMatrix, convertedSecondMatrix);
+
+            return ConvertToArrayOfArrays(convertedResultMatrix);
+        }
+
+        /// <summary>
+        /// Subtracts the <paramref name="scalar"/> from the <paramref name="matrix"/>.
+        /// </summary>
+        /// <param name="matrix">The matrix to subtract from.</param>
+        /// <param name="scalar">The scalar to subtract.</param>
+        /// <returns>The result of subtracting the <paramref name="scalar"/> from the <paramref name="matrix"/>.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static T[,] Subtract(T[,] matrix, T scalar)
+        {
+            ArgumentNullException.ThrowIfNull(matrix);
+            return Add(matrix, -scalar);
+        }
+
+        /// <summary>
+        /// Subtracts the <paramref name="scalar"/> from the <paramref name="matrix"/>.
+        /// </summary>
+        /// <param name="matrix">The matrix to subtract from.</param>
+        /// <param name="scalar">The scalar to subtract.</param>
+        /// <returns>The result of subtracting the <paramref name="scalar"/> from the <paramref name="matrix"/>.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static T[][] Subtract(T[][] matrix, T scalar)
+        {
+            ArgumentNullException.ThrowIfNull(matrix);
+            ArgumentNullException.ThrowIfNull(scalar);
+            T[,] convertedMatrix = ConvertToTwoDimensionalArray(matrix);
+            T[,] convertedResultMatrix = Subtract(convertedMatrix, scalar);
+
+            return ConvertToArrayOfArrays(convertedResultMatrix);
+        }
+
+        /// <summary>
         /// Swaps the rows and columns of <paramref name="matrix"/>.
         /// </summary>
         /// <param name="matrix">The matrix you want to swap the dimensions of.</param>

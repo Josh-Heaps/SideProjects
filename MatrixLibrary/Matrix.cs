@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace MatrixLibrary
 {
-    public partial class Matrix<T> : IEnumerable<T>, IEnumerable where T : INumber <T>
+    public partial class Matrix<T> : IEnumerable<T>, IEnumerable where T : INumber<T>
     {
         private T[,] _values;
         public T[,] Values
@@ -40,8 +40,13 @@ namespace MatrixLibrary
 
         public static Matrix<T> operator *(Matrix<T> matrix, T multiplier) => matrix.Multiply(multiplier);
         public static Matrix<T> operator *(Matrix<T> matrixOne, Matrix<T> matrixTwo) => matrixOne.Multiply(matrixTwo);
+        public static Matrix<T> operator +(Matrix<T> matrix, T scalar) => matrix.Add(scalar);
         public static Matrix<T> operator +(Matrix<T> matrixOne, Matrix<T> matrixTwo) => matrixOne.Add(matrixTwo);
-
+        public static Matrix<T> operator ++(Matrix<T> matrix) => matrix.Add(T.One);
+        public static Matrix<T> operator -(Matrix<T> matrixOne, Matrix<T> matrixTwo) => matrixOne.Subtract(matrixTwo);
+        public static Matrix<T> operator -(Matrix<T> matrix, T scalar) => matrix.Subtract(scalar);
+        public static Matrix<T> operator --(Matrix<T> matrix) => matrix.Subtract(T.One);
+        
         public bool SwapDimensionsToggle { get; set; }
 
         public Matrix(T[,] matrix)
@@ -82,6 +87,36 @@ namespace MatrixLibrary
         public Matrix<T> Add(Matrix<T> matrix)
         {
             Matrix<T> result = new(Add(this.Values, matrix.Values))
+            {
+                SwapDimensionsToggle = this.SwapDimensionsToggle
+            };
+
+            return Matrix<T>.CreateMatrixCopy(result);
+        }
+
+        public Matrix<T> Add(T scalar)
+        {
+            Matrix<T> result = new(Add(this.Values, scalar))
+            {
+                SwapDimensionsToggle = this.SwapDimensionsToggle
+            };
+
+            return Matrix<T>.CreateMatrixCopy(result);
+        }
+
+        public Matrix<T> Subtract(Matrix<T> matrix)
+        {
+            Matrix<T> result = new(Subtract(this.Values, matrix.Values))
+            {
+                SwapDimensionsToggle = this.SwapDimensionsToggle
+            };
+
+            return Matrix<T>.CreateMatrixCopy(result);
+        }
+
+        public Matrix<T> Subtract(T scalar)
+        {
+            Matrix<T> result = new(Subtract(this.Values, scalar))
             {
                 SwapDimensionsToggle = this.SwapDimensionsToggle
             };

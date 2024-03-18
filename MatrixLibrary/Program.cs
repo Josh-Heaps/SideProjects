@@ -117,6 +117,7 @@ void Run(bool printResults = false)
 
     stopwatch.Stop();
 
+    resultMatrixLong += -1;
     string[,] resultMatrix = resultMatrixLong.GetFormattedValues(4);
 
     Console.WriteLine("Elapsed Ticks: " + stopwatch.ElapsedTicks);
@@ -124,7 +125,6 @@ void Run(bool printResults = false)
     if (printResults)
         PrintResult(resultMatrix);
 
-    resultMatrixLong.ForEach(x => Console.WriteLine(x));
 
     Console.WriteLine();
 }
