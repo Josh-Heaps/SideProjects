@@ -236,10 +236,10 @@ namespace MatrixLibrary
 
             readonly object System.Collections.IEnumerator.Current => Current;
 
-            private class Indexer
+            private class Indexer(int x, int y)
             {
-                public int X { get; set; }
-                public int Y { get; set; }
+                public int X { get; set; } = x;
+                public int Y { get; set; } = y;
                 public int MaxX { get; set; }
                 public int MaxY { get; set; }
                 public (int,int) Index
@@ -268,12 +268,6 @@ namespace MatrixLibrary
                     }
 
                     return index;
-                }
-
-                public Indexer(int x, int y)
-                {
-                    X = x;
-                    Y = y;
                 }
             }
         }
