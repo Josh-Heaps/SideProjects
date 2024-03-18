@@ -4,23 +4,23 @@ using System.Diagnostics;
 int matrixSize = 10;
 int incrementer = 0;
 
-double[,] arrayOne = new double[matrixSize, matrixSize];
-double[,] arrayTwo = new double[matrixSize, matrixSize];
+//double[,] arrayOne = new double[matrixSize, matrixSize];
+//double[,] arrayTwo = new double[matrixSize, matrixSize];
 
-for (int i = 0; i < matrixSize; i++)
-{
-    for (int j = 0; j < matrixSize; j++)
-    {
-        arrayOne[i, j] = j + incrementer;
+//for (int i = 0; i < matrixSize; i++)
+//{
+//    for (int j = 0; j < matrixSize; j++)
+//    {
+//        arrayOne[i, j] = j + incrementer;
 
-        arrayTwo[i, j] = i == j ? 1 : 0;
-    }
+//        arrayTwo[i, j] = i == j ? 1 : 0;
+//    }
 
-    incrementer += matrixSize;
-}
+//    incrementer += matrixSize;
+//}
 
 
-Matrix<double> matrixOne = new(arrayOne);
+Matrix<double> matrixOne = new(matrixSize, matrixSize);
 //new double[4, 6]
 //{
 //    { 1.111, 2, 3, 4, 5, 6 },
@@ -35,7 +35,21 @@ Matrix<double> matrixOne = new(arrayOne);
 //    for (int j = 0; j < 6; j++)
 //        matrixTwoArray[i, j] = i == j ? 1 : 0;
 
-Matrix<double> matrixTwo = new(arrayTwo);
+Matrix<double> matrixTwo = new(matrixSize, matrixSize);
+
+
+for (int i = 0; i < matrixSize; i++)
+{
+    for (int j = 0; j < matrixSize; j++)
+    {
+        matrixOne[i, j] = j + incrementer;
+
+        matrixTwo[i, j] = i == j ? 1 : 0;
+    }
+
+    incrementer += matrixSize;
+}
+
 //new double[6, 3]
 //{
 //    { 2, 4, 6 },
@@ -115,7 +129,7 @@ void Run(bool printResults = false)
 {
     stopwatch.Restart();
 
-    Matrix<double> resultMatrixLong = matrixOne.Multiply(matrixTwo);
+    Matrix<double> resultMatrixLong = matrixOne * matrixTwo;
 
     stopwatch.Stop();
 

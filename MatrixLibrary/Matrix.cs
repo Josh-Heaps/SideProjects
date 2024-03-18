@@ -1,8 +1,9 @@
-﻿using System.Numerics;
+﻿using System.Collections;
+using System.Numerics;
 
 namespace MatrixLibrary
 {
-    public partial class Matrix<T> where T : INumber <T>
+    public partial class Matrix<T> : IEnumerable<T>, IEnumerable where T : INumber <T>
     {
         private T[,] _values;
         public T[,] Values
@@ -17,6 +18,30 @@ namespace MatrixLibrary
             }
         }
 
+        public T this[int i, int j]
+        {
+            get
+            {
+                if (i > Values.GetLength(0) || i < 0
+                 || j > Values.GetLength(1) || j < 0)
+                    throw new System.IndexOutOfRangeException();
+
+                return Values[i, j];
+            }
+            set
+            {
+                if (i > Values.GetLength(0) || i < 0
+                 || j > Values.GetLength(1) || j < 0)
+                    throw new System.IndexOutOfRangeException();
+
+                Values[i, j] = value;
+            }
+        }
+
+        public static Matrix<T> operator *(Matrix<T> matrix, T multiplier) => matrix.Multiply(multiplier);
+        public static Matrix<T> operator *(Matrix<T> matrixOne, Matrix<T> matrixTwo) => matrixOne.Multiply(matrixTwo);
+        public static Matrix<T> operator +(Matrix<T> matrixOne, Matrix<T> matrixTwo) => matrixOne.Add(matrixTwo);
+
         public bool SwapDimensionsToggle { get; set; }
 
         public Matrix(T[,] matrix)
@@ -27,6 +52,11 @@ namespace MatrixLibrary
         public Matrix(T[][] matrix)
         {
             _values = ConvertToTwoDimensionalArray(matrix);
+        }
+
+        public Matrix(int rows, int columns)
+        {
+            _values = new T[rows, columns];
         }
 
         public Matrix<T> Multiply(Matrix<T> matrix)
@@ -124,6 +154,95 @@ namespace MatrixLibrary
             };
 
             return result;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return new Enumerator(this);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return new Enumerator(this);
+        }
+
+        public struct Enumerator : IEnumerator<T>, IEnumerator
+        {
+            private Indexer index;
+            private readonly Matrix<T> matrix;
+
+            public Enumerator(Matrix<T> matrix)
+            {
+                index = new(0, 0);
+                Current = matrix[index.X, index.Y];
+                this.matrix = matrix;
+            }
+
+            public readonly void Dispose() { }
+
+            public bool MoveNext()
+            {
+                if (index.X == index.MaxX && index.Y == index.MaxY)
+                    return false;
+
+                Current = matrix[index.X, index.Y];
+                index++;
+                return true;
+            }
+
+            public void Reset()
+            {
+                index = new(0, 0);
+                Current = matrix[index.X, index.Y];
+            }
+
+            public T Current { get; private set; }
+
+            readonly object System.Collections.IEnumerator.Current => Current;
+
+            private class Indexer
+            {
+                public int X { get; set; }
+                public int Y { get; set; }
+                public int MaxX { get; set; }
+                public int MaxY { get; set; }
+                public (int,int) Index
+                {
+                    get
+                    {
+                        return (X, Y);
+                    }
+                    set
+                    {
+                        X = value.Item1;
+                        Y = value.Item2;
+                    }
+                }
+
+                public static Indexer operator ++(Indexer index)
+                {
+                    if (index.X == index.MaxX)
+                    {
+                        index.X = 0;
+                        index.Y++;
+                    }
+                    else
+                    {
+                        index.X++;
+                    }
+
+                    if (index.Y == index.MaxY)
+                        index.Index = (0, 0);
+
+                    return index;
+                }
+
+                public Indexer(int x, int y)
+                {
+                    X = x;
+                    Y = y;
+                }
+            }
         }
     }
 }
