@@ -277,7 +277,7 @@ namespace MatrixLibrary
                 public int Y { get; set; } = y;
                 public int MaxX { get; set; }
                 public int MaxY { get; set; }
-                public (int,int) Index
+                public (int x, int y) Index
                 {
                     get
                     {
@@ -285,8 +285,8 @@ namespace MatrixLibrary
                     }
                     set
                     {
-                        X = value.Item1;
-                        Y = value.Item2;
+                        X = value.x;
+                        Y = value.y;
                     }
                 }
 
