@@ -1,24 +1,8 @@
 ﻿using MatrixLibrary;
 using System.Diagnostics;
 
-int matrixSize = 10;
+int matrixSize = 15;
 int incrementer = 0;
-
-//double[,] arrayOne = new double[matrixSize, matrixSize];
-//double[,] arrayTwo = new double[matrixSize, matrixSize];
-
-//for (int i = 0; i < matrixSize; i++)
-//{
-//    for (int j = 0; j < matrixSize; j++)
-//    {
-//        arrayOne[i, j] = j + incrementer;
-
-//        arrayTwo[i, j] = i == j ? 1 : 0;
-//    }
-
-//    incrementer += matrixSize;
-//}
-
 
 Matrix<double> matrixOne = new(matrixSize, matrixSize);
 //new double[4, 6]
@@ -139,6 +123,8 @@ void Run(bool printResults = false)
     
     if (printResults)
         PrintResult(resultMatrix);
+
+    resultMatrixLong.ForEach(x => Console.WriteLine(x));
 
     Console.WriteLine();
 }

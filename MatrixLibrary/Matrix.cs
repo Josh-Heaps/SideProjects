@@ -208,6 +208,8 @@ namespace MatrixLibrary
             public Enumerator(Matrix<T> matrix)
             {
                 index = new(0, 0);
+                index.MaxX = matrix.Values.GetLength(0) - 1;
+                index.MaxY = matrix.Values.GetLength(1) - 1;
                 Current = matrix[index.X, index.Y];
                 this.matrix = matrix;
             }
@@ -216,7 +218,7 @@ namespace MatrixLibrary
 
             public bool MoveNext()
             {
-                if (index.X == index.MaxX && index.Y == index.MaxY)
+                if (index.X > index.MaxX)
                     return false;
 
                 Current = matrix[index.X, index.Y];
@@ -255,18 +257,15 @@ namespace MatrixLibrary
 
                 public static Indexer operator ++(Indexer index)
                 {
-                    if (index.X == index.MaxX)
+                    if (index.Y == index.MaxX)
                     {
-                        index.X = 0;
-                        index.Y++;
+                        index.Y = 0;
+                        index.X++;
                     }
                     else
                     {
-                        index.X++;
+                        index.Y++;
                     }
-
-                    if (index.Y == index.MaxY)
-                        index.Index = (0, 0);
 
                     return index;
                 }
