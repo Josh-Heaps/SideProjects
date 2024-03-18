@@ -66,7 +66,7 @@ namespace MatrixLibrary
                 SwapDimensionsToggle = this.SwapDimensionsToggle
             };
 
-            return CreateMatrixCopy(result);
+            return Matrix<T>.CreateMatrixCopy(result);
         }
 
         public Matrix<T> Multiply(T multiplier)
@@ -76,7 +76,7 @@ namespace MatrixLibrary
                 SwapDimensionsToggle = this.SwapDimensionsToggle
             };
 
-            return CreateMatrixCopy(result);
+            return Matrix<T>.CreateMatrixCopy(result);
         }
 
         public Matrix<T> Add(Matrix<T> matrix)
@@ -86,7 +86,7 @@ namespace MatrixLibrary
                 SwapDimensionsToggle = this.SwapDimensionsToggle
             };
 
-            return CreateMatrixCopy(result);
+            return Matrix<T>.CreateMatrixCopy(result);
         }
 
         public T[] GetRow(int index) => GetRow(Values, index);
@@ -144,7 +144,51 @@ namespace MatrixLibrary
             return result;
         }
 
-        private Matrix<T> CreateMatrixCopy(Matrix<T> matrix)
+        public IEnumerator<T> GetEnumerator()
+        {
+            return new Enumerator(this);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return new Enumerator(this);
+        }
+
+        public void ForEach(Action<T> action)
+        {
+            foreach (T value in this)
+                action(value);
+        }
+
+        public List<T> GetEachByPredicate(Predicate<T> predicate)
+        {
+            List<T> values = [];
+
+            foreach (T value in this)
+                if (predicate(value))
+                    values.Add(value);
+
+            return values;
+        }
+
+        public List<List<T>> ConvertTo2DList()
+        {
+            List<List<T>> list = [];
+
+            for (int i = 0; i < Values.GetLength(0); i++)
+            {
+                List<T> innerList = [];
+
+                for (int j = 0; j < Values.GetLength(1); j++)
+                    innerList.Add(Values[i, j]);
+
+                list.Add(innerList);
+            }
+
+            return list;
+        }
+
+        private static Matrix<T> CreateMatrixCopy(Matrix<T> matrix)
         {
             T[,] values = matrix.SwapDimensionsToggle ? SwapDimensions(matrix.Values) : matrix.Values;
 
@@ -154,16 +198,6 @@ namespace MatrixLibrary
             };
 
             return result;
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return new Enumerator(this);
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return new Enumerator(this);
         }
 
         public struct Enumerator : IEnumerator<T>, IEnumerator
