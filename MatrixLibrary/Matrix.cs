@@ -7,6 +7,9 @@ namespace MatrixLibrary
     public partial class Matrix<T> : IEnumerable<T>, IEnumerable where T : INumber<T>
     {
         private T[,] _values;
+        /// <summary>
+        /// Get or set the values of the matrix. If the SwapDimensionsToggle is true, the dimensions of the matrix will be swapped.
+        /// </summary>
         public T[,] Values
         {
             get
@@ -19,6 +22,13 @@ namespace MatrixLibrary
             }
         }
 
+        /// <summary>
+        /// Get or set the value at the specified index.
+        /// </summary>
+        /// <param name="i">X index of the matrix.</param>
+        /// <param name="j">Y index of the matrix.</param>
+        /// <returns>A type <typeparamref name="T"/> at the specified index.</returns>
+        /// <exception cref="System.IndexOutOfRangeException">Thrown when i or j are not in range of the matrix.</exception>
         public T this[int i, int j]
         {
             get
@@ -39,32 +49,132 @@ namespace MatrixLibrary
             }
         }
 
-        public static Matrix<T> operator *(Matrix<T> matrix, T multiplier) => matrix.Multiply(multiplier);
+        /// <summary>
+        /// Multiplies two matrices together. Assumes formatting is [rows, columns].
+        /// </summary>
+        /// <example>
+        /// If the return value is the answer you expect from multiplying <paramref name="matrixTwo"/> by <paramref name="matrixOne"/>
+        /// instead of what you intended, this typically means you've formatted your matrices as
+        /// [columns, rows]. The following code example should fix your issue.
+        /// <code>
+        /// Matrix.Multiply(Matrix.SwapDimensions(matrixTwo), Matrix.SwapDimensions(matrixOne));
+        /// </code>
+        /// </example>
+        /// <param name="matrixOne">The first matrix to multiply.</param>
+        /// <param name="matrixTwo">The second matrix to multiply.</param>
+        /// <returns>The product of the two matrices.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the parameter is null.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the matrices have incompatible dimensions.</exception>
         public static Matrix<T> operator *(Matrix<T> matrixOne, Matrix<T> matrixTwo) => matrixOne.Multiply(matrixTwo);
-        public static Matrix<T> operator +(Matrix<T> matrix, T scalar) => matrix.Add(scalar);
+        /// <summary>
+        /// Multiplies <paramref name="matrix"/> by <paramref name="multiplier"/>.
+        /// </summary>
+        /// <param name="matrix">The matrix to multiply.</param>
+        /// <param name="multiplier">The numeric value the matrix will be multiplied by.</param>
+        /// <returns>A new matrix that is the product of the <paramref name="matrix"/> and the <paramref name="multiplier"/>.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static Matrix<T> operator *(Matrix<T> matrix, T multiplier) => matrix.Multiply(multiplier);
+        /// <summary>
+        /// Adds two matrices together.
+        /// </summary>
+        /// <param name="matrixOne">The first matrix to add.</param>
+        /// <param name="matrixTwo">The second matrix to add.</param>
+        /// <returns>The result of adding the two matrices together.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public static Matrix<T> operator +(Matrix<T> matrixOne, Matrix<T> matrixTwo) => matrixOne.Add(matrixTwo);
+        /// <summary>
+        /// Adds <paramref name="scalar"/> to every value in <paramref name="matrix"/>.
+        /// </summary>
+        /// <param name="matrix">The first matrix to add.</param>
+        /// <param name="scalar">The scalar value to add to the matrix.</param>
+        /// <returns>The result of adding the scalar to the matrix.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static Matrix<T> operator +(Matrix<T> matrix, T scalar) => matrix.Add(scalar);
+        /// <summary>
+        /// Adds <see cref="T.One"/> to every value in <paramref name="matrix"/>.
+        /// </summary>
+        /// <param name="matrix">The first matrix to add.</param>
+        /// <returns>The result of adding <see cref="T.One"/> to the matrix.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public static Matrix<T> operator ++(Matrix<T> matrix) => matrix.Add(T.One);
+        /// <summary>
+        /// Subtracts the <paramref name="matrixTwo"/> from the <paramref name="matrixOne"/>.
+        /// </summary>
+        /// <param name="matrixOne">The matrix to subtract from.</param>
+        /// <param name="matrixTwo">The matrix to subtract.</param>
+        /// <returns>The result of subtracting the <paramref name="matrixTwo"/> from the <paramref name="matrixOne"/>.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public static Matrix<T> operator -(Matrix<T> matrixOne, Matrix<T> matrixTwo) => matrixOne.Subtract(matrixTwo);
+        /// <summary>
+        /// Subtracts the <paramref name="scalar"/> from the <paramref name="matrix"/>.
+        /// </summary>
+        /// <param name="matrix">The matrix to subtract from.</param>
+        /// <param name="scalar">The scalar to subtract.</param>
+        /// <returns>The result of subtracting the <paramref name="scalar"/> from the <paramref name="matrix"/>.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public static Matrix<T> operator -(Matrix<T> matrix, T scalar) => matrix.Subtract(scalar);
+        /// <summary>
+        /// Subtracts <see cref="T.One"/> from the <paramref name="matrix"/>.
+        /// </summary>
+        /// <param name="matrix">The matrix to subtract from.</param>
+        /// <returns>The result of subtracting <see cref="T.One"/> from the <paramref name="matrix"/>.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public static Matrix<T> operator --(Matrix<T> matrix) => matrix.Subtract(T.One);
         
+        /// <summary>
+        /// The toggle for swapping the dimensions of the matrix.
+        /// </summary>
         public bool SwapDimensionsToggle { get; set; }
 
+        /// <summary>
+        /// Create a new matrix with the specified values.
+        /// </summary>
+        /// <param name="matrix">A two dimensional array</param>
         public Matrix(T[,] matrix)
         {
             _values = matrix;
         }
 
+        /// <summary>
+        /// Create a new matrix with the specified values.
+        /// </summary>
+        /// <param name="matrix">An array of arrays.</param>
         public Matrix(T[][] matrix)
         {
             _values = ConvertToTwoDimensionalArray(matrix);
         }
 
+        /// <summary>
+        /// Create a new matrix with the specified dimensions.
+        /// </summary>
+        /// <param name="rows">Number of rows in the matrix.</param>
+        /// <param name="columns">Number of columns in the matrix.</param>
         public Matrix(int rows, int columns)
         {
             _values = new T[rows, columns];
         }
 
+        /// <summary>
+        /// Multiplies <see langword="this"/> by <paramref name="matrix"/>. Assumes formatting is [rows, columns].
+        /// </summary>
+        /// <example>
+        /// If the return value is the answer you expect from multiplying <see langword="this"/> by <paramref name="matrix"/>
+        /// instead of what you intended, this typically means you've formatted your matrices as
+        /// [columns, rows]. The following code example should fix your issue.
+        /// <code>
+        /// Matrix.Multiply(Matrix.SwapDimensions(matrixTwo), Matrix.SwapDimensions(matrixOne));
+        /// </code>
+        /// </example>
+        /// <param name="matrix">The matrix to multiply with the current instance of <see langword="this"/>.</param>
+        /// <returns>The product of the two matrices.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the parameter is null.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the matrices have incompatible dimensions.</exception>
         public Matrix<T> Multiply(Matrix<T> matrix)
         {
             Matrix<T> result = new(Multiply(this.Values, matrix.Values))
@@ -75,6 +185,12 @@ namespace MatrixLibrary
             return Matrix<T>.CreateMatrixCopy(result);
         }
 
+        /// <summary>
+        /// Multiplies <see langword="this"/> by <paramref name="multiplier"/>.
+        /// </summary>
+        /// <param name="multiplier">The numeric value the matrix will be multiplied by.</param>
+        /// <returns>A new matrix that is the product of the <see langword="this"/> and the <paramref name="multiplier"/>.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public Matrix<T> Multiply(T multiplier)
         {
             Matrix<T> result = new(Multiply(this.Values, multiplier))
@@ -85,6 +201,11 @@ namespace MatrixLibrary
             return Matrix<T>.CreateMatrixCopy(result);
         }
 
+        /// <summary>
+        /// Adds <paramref name="matrix"/> to <see langword="this"/>.
+        /// </summary>
+        /// <param name="matrix">The <see cref="Matrix{T}"/> to add to <see langword="this"/>.</param>
+        /// <returns>A <see langword="new"/> <see cref="Matrix{T}"/>, where the values are the sum of the two matrices.</returns>
         public Matrix<T> Add(Matrix<T> matrix)
         {
             Matrix<T> result = new(Add(this.Values, matrix.Values))
@@ -95,6 +216,11 @@ namespace MatrixLibrary
             return Matrix<T>.CreateMatrixCopy(result);
         }
 
+        /// <summary>
+        /// Adds <paramref name="scalar"/> to every value in <see langword="this"/>.
+        /// </summary>
+        /// <param name="scalar">The <typeparamref name="T"/> to add to <see langword="this"/>.</param>
+        /// <returns>A <see langword="new"/> <see cref="Matrix{T}"/>, where the values are the sum of <paramref name="scalar"/> and the values in <see langword="this"/>.</returns>
         public Matrix<T> Add(T scalar)
         {
             Matrix<T> result = new(Add(this.Values, scalar))
@@ -105,6 +231,11 @@ namespace MatrixLibrary
             return Matrix<T>.CreateMatrixCopy(result);
         }
 
+        /// <summary>
+        /// Subtracts <paramref name="matrix"/> from <see langword="this"/>.
+        /// </summary>
+        /// <param name="matrix">The <see cref="Matrix{T}"/> to subtract from <see langword="this"/>.</param>
+        /// <returns>A <see langword="new"/> <see cref="Matrix{T}"/>, where the values are the difference of the two matrices.</returns>
         public Matrix<T> Subtract(Matrix<T> matrix)
         {
             Matrix<T> result = new(Subtract(this.Values, matrix.Values))
@@ -115,6 +246,11 @@ namespace MatrixLibrary
             return Matrix<T>.CreateMatrixCopy(result);
         }
 
+        /// <summary>
+        /// Subtracts <paramref name="scalar"/> from every value in <see langword="this"/>.
+        /// </summary>
+        /// <param name="scalar">The <typeparamref name="T"/> to subtract from <see langword="this"/>.</param>
+        /// <returns>A <see langword="new"/> <see cref="Matrix{T}"/>, where the values are the difference of <paramref name="scalar"/> and the values in <see langword="this"/>.</returns>
         public Matrix<T> Subtract(T scalar)
         {
             Matrix<T> result = new(Subtract(this.Values, scalar))
@@ -125,12 +261,31 @@ namespace MatrixLibrary
             return Matrix<T>.CreateMatrixCopy(result);
         }
 
+        /// <summary>
+        /// Gets the row at the specified <paramref name="index"/>.
+        /// </summary>
+        /// <param name="index">Index of the desired row.</param>
+        /// <returns>The <see cref="Array"/> at <paramref name="index"/>.</returns>
         public T[] GetRow(int index) => GetRow(Values, index);
-        
+
+        /// <summary>
+        /// Gets the column at the specified <paramref name="index"/>.
+        /// </summary>
+        /// <param name="index">Index of the desired column.</param>
+        /// <returns>The <see cref="Array"/> at <paramref name="index"/>.</returns>
         public T[] GetColumn(int index) => GetColumn(Values, index);
 
+        /// <summary>
+        /// Converts the matrix to an array of arrays.
+        /// </summary>
+        /// <returns>An array of arrays that holds the values of the matrix.</returns>
         public T[][] ConvertToArrayOfArrays() => ConvertToArrayOfArrays(Values);
 
+        /// <summary>
+        /// Converts the matrix to a 2 dimensional array of strings, formatted to the specified decimal place.
+        /// </summary>
+        /// <param name="decimalPlace">Max number of digits after the decimal.</param>
+        /// <returns>A 2 dimensional array of formatted values.</returns>
         public string[,] GetFormattedValues(int decimalPlace = 2)
         {
             int maxLength = 0;
@@ -180,22 +335,33 @@ namespace MatrixLibrary
             return result;
         }
 
+        /// <inheritdoc/>
         public IEnumerator<T> GetEnumerator()
         {
             return new Enumerator(this);
         }
 
+        /// <inheritdoc/>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return new Enumerator(this);
         }
 
+        /// <summary>
+        /// Performs the specified action on each element of the matrix.
+        /// </summary>
+        /// <param name="action">A <see langword="delegate"/> that takes a parameter, and returns nothing.</param>
         public void ForEach(Action<T> action)
         {
             foreach (T value in this)
                 action(value);
         }
 
+        /// <summary>
+        /// Returns every element that matches the specified <paramref name="predicate"/>.
+        /// </summary>
+        /// <param name="predicate">The condition to check each value against.</param>
+        /// <returns>Every element that matches the specified <paramref name="predicate"/>.</returns>
         public List<T> GetEachByPredicate(Predicate<T> predicate)
         {
             List<T> values = [];
@@ -207,6 +373,10 @@ namespace MatrixLibrary
             return values;
         }
 
+        /// <summary>
+        /// Converts the matrix to a 2 <see cref="List{T}"/> of <see cref="List{T}"/>s.
+        /// </summary>
+        /// <returns>A <see cref="List{T}"/> of <see cref="List{T}"/>s.</returns>
         public List<List<T>> ConvertTo2DList()
         {
             List<List<T>> list = [];
@@ -224,6 +394,11 @@ namespace MatrixLibrary
             return list;
         }
 
+        /// <summary>
+        /// Creates a copy of the <paramref name="matrix"/>, without copying the reference.
+        /// </summary>
+        /// <param name="matrix">The matrix to copy.</param>
+        /// <returns>A copy of <paramref name="matrix"/>.</returns>
         private static Matrix<T> CreateMatrixCopy(Matrix<T> matrix)
         {
             T[,] values = matrix.SwapDimensionsToggle ? SwapDimensions(matrix.Values) : matrix.Values;
@@ -236,6 +411,9 @@ namespace MatrixLibrary
             return result;
         }
 
+        /// <summary>
+        /// Used to get the <see cref="IEnumerable"/> of the matrix.
+        /// </summary>
         public struct Enumerator : IEnumerator<T>, IEnumerator
         {
             private Indexer index;
