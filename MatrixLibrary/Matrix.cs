@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Numerics;
 
 namespace MatrixLibrary
@@ -273,41 +274,41 @@ namespace MatrixLibrary
             public T Current { get; private set; }
 
             readonly object System.Collections.IEnumerator.Current => Current;
+        }
+    }
 
-            private class Indexer(int x, int y)
+    internal class Indexer(int x, int y)
+    {
+        public int X { get; set; } = x;
+        public int Y { get; set; } = y;
+        public int MaxX { get; set; }
+        public int MaxY { get; set; }
+        public (int x, int y) Index
+        {
+            get
             {
-                public int X { get; set; } = x;
-                public int Y { get; set; } = y;
-                public int MaxX { get; set; }
-                public int MaxY { get; set; }
-                public (int x, int y) Index
-                {
-                    get
-                    {
-                        return (X, Y);
-                    }
-                    set
-                    {
-                        X = value.x;
-                        Y = value.y;
-                    }
-                }
-
-                public static Indexer operator ++(Indexer index)
-                {
-                    if (index.Y == index.MaxX)
-                    {
-                        index.Y = 0;
-                        index.X++;
-                    }
-                    else
-                    {
-                        index.Y++;
-                    }
-
-                    return index;
-                }
+                return (X, Y);
             }
+            set
+            {
+                X = value.x;
+                Y = value.y;
+            }
+        }
+
+        public static Indexer operator ++(Indexer index)
+        {
+            if (index.Y == index.MaxX)
+            {
+                index.Y = 0;
+                index.X++;
+            }
+            else
+            {
+                index.Y++;
+            }
+
+            return index;
         }
     }
 }
