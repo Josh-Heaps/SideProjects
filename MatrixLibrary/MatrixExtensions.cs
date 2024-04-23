@@ -35,7 +35,7 @@ namespace MatrixLibrary
 
             T[,] resultMatrix = new T[firstMatrixRowCount, secondMatrixColumnCount];
 
-            for (int i = 0; i < firstMatrixRowCount; i++)
+            Parallel.For(0, firstMatrixRowCount, i =>
             {
                 T[] firstMatrixRow = GetRow(firstMatrix, i);
 
@@ -50,7 +50,7 @@ namespace MatrixLibrary
                         resultMatrix[i, j] += firstMatrixRow[k] * secondMatrixColumn[k];
                     }
                 }
-            }
+            });
 
             return resultMatrix;
         }
@@ -98,14 +98,14 @@ namespace MatrixLibrary
 
             T[,] resultMatrix = new T[matrix.GetLength(0), matrix.GetLength(1)];
 
-            for (int i = 0; i < matrix.GetLength(0); i++)
+            Parallel.For(0, matrix.GetLength(0), i =>
             {
                 for (int j = 0; j < matrix.GetLength(1); j++)
                 {
                     T cellValue = matrix[i, j];
                     resultMatrix[i, j] = cellValue * (dynamic)multiplier;
                 }
-            }
+            });
 
             return resultMatrix;
         }
@@ -147,13 +147,13 @@ namespace MatrixLibrary
 
             T[,] resultMatrix = new T[firstMatrixRowCount, firstMatrixColumnCount];
 
-            for (int i = 0; i < firstMatrixRowCount; i++)
+            Parallel.For(0, firstMatrixRowCount, i =>
             {
                 for (int j = 0; j < firstMatrixColumnCount; j++)
                 {
                     resultMatrix[i, j] = firstMatrix[i, j] + secondMatrix[i, j];
                 }
-            }
+            });
 
             return resultMatrix;
         }
@@ -304,13 +304,13 @@ namespace MatrixLibrary
 
             T[,] swappedMatrix = new T[columns, rows];
 
-            for (int i = 0; i < rows; i++)
+            Parallel.For(0, rows, i =>
             {
                 for (int j = 0; j < columns; j++)
                 {
                     swappedMatrix[j, i] = matrix[i, j];
                 }
-            }
+            });
 
             return swappedMatrix;
         }
@@ -337,7 +337,7 @@ namespace MatrixLibrary
             return result;
         }
 
-        private static T[][] ConvertToArrayOfArrays<T>(T[,] matrix)
+        private static T[][] ConvertToArrayOfArrays(T[,] matrix)
         {
             ArgumentNullException.ThrowIfNull(matrix);
             T[][] result = new T[matrix.GetLength(0)][];
