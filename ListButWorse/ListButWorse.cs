@@ -190,7 +190,7 @@ namespace ListButWorse
 
             public T Current { get; private set; }
 
-            readonly object System.Collections.IEnumerator.Current => Current;
+            readonly object IEnumerator.Current => Current;
         }
     }
 }
