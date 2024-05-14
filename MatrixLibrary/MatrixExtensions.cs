@@ -315,6 +315,11 @@ namespace MatrixLibrary
             return swappedMatrix;
         }
 
+        /// <summary>
+        /// Swaps the rows and columns of <paramref name="matrix"/>.
+        /// </summary>
+        /// <param name="matrix">The matrix you want to swap the dimensions of.</param>
+        /// <returns>A copy of <paramref name="matrix"/> with the dimensions swapped.</returns>
         public static T[][] SwapDimensions(T[][] matrix)
         {
             ArgumentNullException.ThrowIfNull(matrix);
