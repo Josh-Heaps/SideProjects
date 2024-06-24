@@ -5,7 +5,9 @@ VisualStudioVersion = 17.9.34607.119
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatrixLibrary", "MatrixLibrary\MatrixLibrary.csproj", "{73A9C0C8-2E69-49F9-BD05-174AB70BBDBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListButWorse", "ListButWorse\ListButWorse.csproj", "{4319FF9C-D02A-44AF-BD35-1AF4F8DBCA90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListButWorse", "ListButWorse\ListButWorse.csproj", "{4319FF9C-D02A-44AF-BD35-1AF4F8DBCA90}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskButWorse", "TaskButWorse\TaskButWorse.csproj", "{D0417FA6-4C63-4F5E-B949-CAFB98ED2197}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{4319FF9C-D02A-44AF-BD35-1AF4F8DBCA90}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4319FF9C-D02A-44AF-BD35-1AF4F8DBCA90}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4319FF9C-D02A-44AF-BD35-1AF4F8DBCA90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0417FA6-4C63-4F5E-B949-CAFB98ED2197}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0417FA6-4C63-4F5E-B949-CAFB98ED2197}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0417FA6-4C63-4F5E-B949-CAFB98ED2197}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0417FA6-4C63-4F5E-B949-CAFB98ED2197}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
