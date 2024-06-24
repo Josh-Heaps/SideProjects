@@ -136,18 +136,20 @@ namespace MatrixLibrary
         /// Create a new matrix with the specified values.
         /// </summary>
         /// <param name="matrix">A two dimensional array</param>
-        public Matrix(T[,] matrix)
+        public Matrix(T[,] matrix, bool swapDimensions = false)
         {
             _values = matrix;
+            SwapDimensionsToggle = swapDimensions;
         }
 
         /// <summary>
         /// Create a new matrix with the specified values.
         /// </summary>
         /// <param name="matrix">An array of arrays.</param>
-        public Matrix(T[][] matrix)
+        public Matrix(T[][] matrix, bool swapDimensions = false)
         {
             _values = ConvertToTwoDimensionalArray(matrix);
+            SwapDimensionsToggle = swapDimensions;
         }
 
         /// <summary>
@@ -175,15 +177,8 @@ namespace MatrixLibrary
         /// <returns>The product of the two matrices.</returns>
         /// <exception cref="ArgumentNullException">Thrown when the parameter is null.</exception>
         /// <exception cref="InvalidOperationException">Thrown when the matrices have incompatible dimensions.</exception>
-        public Matrix<T> Multiply(Matrix<T> matrix)
-        {
-            Matrix<T> result = new(Multiply(this.Values, matrix.Values))
-            {
-                SwapDimensionsToggle = this.SwapDimensionsToggle
-            };
-
-            return Matrix<T>.CreateMatrixCopy(result);
-        }
+        public Matrix<T> Multiply(Matrix<T> matrix) =>
+            Matrix<T>.CreateMatrixCopy(new(Multiply(Values, matrix.Values), SwapDimensionsToggle));
 
         /// <summary>
         /// Multiplies <see langword="this"/> by <paramref name="multiplier"/>.
@@ -191,75 +186,40 @@ namespace MatrixLibrary
         /// <param name="multiplier">The numeric value the matrix will be multiplied by.</param>
         /// <returns>A new matrix that is the product of the <see langword="this"/> and the <paramref name="multiplier"/>.</returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public Matrix<T> Multiply(T multiplier)
-        {
-            Matrix<T> result = new(Multiply(this.Values, multiplier))
-            {
-                SwapDimensionsToggle = this.SwapDimensionsToggle
-            };
-
-            return Matrix<T>.CreateMatrixCopy(result);
-        }
+        public Matrix<T> Multiply(T multiplier) =>
+            Matrix<T>.CreateMatrixCopy(new(Multiply(Values, multiplier), SwapDimensionsToggle));
 
         /// <summary>
         /// Adds <paramref name="matrix"/> to <see langword="this"/>.
         /// </summary>
         /// <param name="matrix">The <see cref="Matrix{T}"/> to add to <see langword="this"/>.</param>
         /// <returns>A <see langword="new"/> <see cref="Matrix{T}"/>, where the values are the sum of the two matrices.</returns>
-        public Matrix<T> Add(Matrix<T> matrix)
-        {
-            Matrix<T> result = new(Add(this.Values, matrix.Values))
-            {
-                SwapDimensionsToggle = this.SwapDimensionsToggle
-            };
-
-            return Matrix<T>.CreateMatrixCopy(result);
-        }
+        public Matrix<T> Add(Matrix<T> matrix) =>
+            Matrix<T>.CreateMatrixCopy(new(Add(Values, matrix.Values), SwapDimensionsToggle));
 
         /// <summary>
         /// Adds <paramref name="scalar"/> to every value in <see langword="this"/>.
         /// </summary>
         /// <param name="scalar">The <typeparamref name="T"/> to add to <see langword="this"/>.</param>
         /// <returns>A <see langword="new"/> <see cref="Matrix{T}"/>, where the values are the sum of <paramref name="scalar"/> and the values in <see langword="this"/>.</returns>
-        public Matrix<T> Add(T scalar)
-        {
-            Matrix<T> result = new(Add(this.Values, scalar))
-            {
-                SwapDimensionsToggle = this.SwapDimensionsToggle
-            };
-
-            return Matrix<T>.CreateMatrixCopy(result);
-        }
+        public Matrix<T> Add(T scalar) =>
+            Matrix<T>.CreateMatrixCopy(new(Add(Values, scalar), SwapDimensionsToggle));
 
         /// <summary>
         /// Subtracts <paramref name="matrix"/> from <see langword="this"/>.
         /// </summary>
         /// <param name="matrix">The <see cref="Matrix{T}"/> to subtract from <see langword="this"/>.</param>
         /// <returns>A <see langword="new"/> <see cref="Matrix{T}"/>, where the values are the difference of the two matrices.</returns>
-        public Matrix<T> Subtract(Matrix<T> matrix)
-        {
-            Matrix<T> result = new(Subtract(this.Values, matrix.Values))
-            {
-                SwapDimensionsToggle = this.SwapDimensionsToggle
-            };
-
-            return Matrix<T>.CreateMatrixCopy(result);
-        }
+        public Matrix<T> Subtract(Matrix<T> matrix) =>
+            Matrix<T>.CreateMatrixCopy(new(Subtract(Values, matrix.Values), SwapDimensionsToggle));
 
         /// <summary>
         /// Subtracts <paramref name="scalar"/> from every value in <see langword="this"/>.
         /// </summary>
         /// <param name="scalar">The <typeparamref name="T"/> to subtract from <see langword="this"/>.</param>
         /// <returns>A <see langword="new"/> <see cref="Matrix{T}"/>, where the values are the difference of <paramref name="scalar"/> and the values in <see langword="this"/>.</returns>
-        public Matrix<T> Subtract(T scalar)
-        {
-            Matrix<T> result = new(Subtract(this.Values, scalar))
-            {
-                SwapDimensionsToggle = this.SwapDimensionsToggle
-            };
-
-            return Matrix<T>.CreateMatrixCopy(result);
-        }
+        public Matrix<T> Subtract(T scalar) =>
+            Matrix<T>.CreateMatrixCopy(new(Subtract(Values, scalar), SwapDimensionsToggle));
 
         /// <summary>
         /// Gets the row at the specified <paramref name="index"/>.
@@ -399,17 +359,9 @@ namespace MatrixLibrary
         /// </summary>
         /// <param name="matrix">The matrix to copy.</param>
         /// <returns>A copy of <paramref name="matrix"/>.</returns>
-        private static Matrix<T> CreateMatrixCopy(Matrix<T> matrix)
-        {
-            T[,] values = matrix.SwapDimensionsToggle ? SwapDimensions(matrix.Values) : matrix.Values;
-
-            Matrix<T> result = new(values)
-            {
-                SwapDimensionsToggle = matrix.SwapDimensionsToggle
-            };
-
-            return result;
-        }
+        private static Matrix<T> CreateMatrixCopy(Matrix<T> matrix) =>
+            new(matrix.SwapDimensionsToggle ? SwapDimensions(matrix.Values) : matrix.Values, matrix.SwapDimensionsToggle);
+        
 
         /// <summary>
         /// Used to get the <see cref="IEnumerable"/> of the matrix.
