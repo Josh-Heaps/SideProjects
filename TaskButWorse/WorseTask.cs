@@ -1,4 +1,4 @@
-﻿namespace WorseTask
+﻿namespace TaskButWorse
 {
     public enum TaskStatus
     {
@@ -77,30 +77,16 @@
 
         public static WorseTask<IEnumerable<WorseTask>> WhenAll(params WorseTask[] tasks)
         {
-            while (tasks.Any(task => !task.IsComplete))
+            return WorseTask<IEnumerable<WorseTask>>.Run(() =>
             {
-                foreach (var task in tasks)
-                    task.UpdateTaskStatus();
-            }
-
-            WorseTask<IEnumerable<WorseTask>> result = new();
-            result._result = tasks;
-            result.Status = tasks.Any(task => task.Status == TaskStatus.Faulted) ? TaskStatus.Faulted : TaskStatus.Completed;
-
-            if (result.Status == TaskStatus.Faulted)
-            {
-                List<Exception> exceptions = new();
-
-                foreach (var task in tasks.Where(task => task.Status == TaskStatus.Faulted))
+                while (!tasks.Any(task => task.IsComplete))
                 {
-                    if (task.TaskException is not null)
-                        exceptions.Add(task.TaskException);
+                    foreach (var task in tasks)
+                        task.UpdateTaskStatus();
                 }
 
-                result.TaskException = new AggregateException("Task(s) encountered an Exception.", exceptions);
-            }
-
-            return result;
+                return tasks;
+            });
         }
     }
 
@@ -175,30 +161,16 @@
 
         public static WorseTask<IEnumerable<WorseTask<T>>> WhenAll(params WorseTask<T>[] tasks)
         {
-            while (tasks.Any(task => !task.IsComplete))
+            return WorseTask<IEnumerable<WorseTask<T>>>.Run(() =>
             {
-                foreach (var task in tasks)
-                    task.UpdateTaskStatus();
-            }
-
-            WorseTask<IEnumerable<WorseTask<T>>> result = new();
-            result._result = tasks;
-            result.Status = tasks.Any(task => task.Status == TaskStatus.Faulted) ? TaskStatus.Faulted : TaskStatus.Completed;
-
-            if (result.Status == TaskStatus.Faulted)
-            {
-                List<Exception> exceptions = new();
-
-                foreach (var task in tasks.Where(task => task.Status == TaskStatus.Faulted))
+                while (tasks.Any(task => !task.IsComplete))
                 {
-                    if (task.TaskException is not null)
-                        exceptions.Add(task.TaskException);
+                    foreach (var task in tasks)
+                        task.UpdateTaskStatus();
                 }
 
-                result.TaskException = new AggregateException("Task(s) encountered an Exception.", exceptions);
-            }
-
-            return result;
+                return tasks;
+            });
         }
     }
 }

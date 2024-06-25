@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace WorseTask
+namespace TaskButWorse
 {
     public class WorseAwaiter : INotifyCompletion
     {
