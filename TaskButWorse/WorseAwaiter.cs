@@ -23,8 +23,8 @@ namespace TaskButWorse
         {
             while (!_task.IsComplete) { _task.UpdateTaskStatus(); }
 
-            if (_task.Exception is not null)
-                throw _task.Exception;
+            if (_task.TaskException is not null)
+                throw _task.TaskException;
         }
     }
 
@@ -49,8 +49,8 @@ namespace TaskButWorse
         {
             while (!_task.IsComplete) { _task.UpdateTaskStatus(); }
 
-            if (_task.Exception is not null)
-                throw _task.Exception;
+            if (_task.TaskException is not null)
+                throw _task.TaskException;
 
             return _task._result;
         }
