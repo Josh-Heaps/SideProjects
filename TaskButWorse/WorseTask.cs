@@ -15,6 +15,7 @@ namespace TaskButWorse
     public class WorseTask
     {
         public TaskStatus Status { get; private set; }
+        public bool IsComplete { get => Status == TaskStatus.Completed || Status == TaskStatus.Faulted; }
 
         private Thread? _executionThread;
 
@@ -62,11 +63,24 @@ namespace TaskButWorse
             else
                 Status = TaskStatus.Completed;
         }
+
+        public static WorseTask WhenAny(params WorseTask[] tasks)
+        {
+            while (!tasks.Any(task => task.IsComplete))
+            {
+                foreach (var task in tasks)
+                    task.UpdateTaskStatus();
+            }
+
+            return tasks.First(task => task.IsComplete);
+        }
     }
 
     public class WorseTask<T>
     {
         public TaskStatus Status { get; private set; }
+
+        public bool IsComplete { get => Status == TaskStatus.Completed || Status == TaskStatus.Faulted; }
 
         private Thread? _executionThread;
 
@@ -115,6 +129,17 @@ namespace TaskButWorse
                 Status = TaskStatus.Faulted;
             else
                 Status = TaskStatus.Completed;
+        }
+
+        public static WorseTask<T> WhenAny(params WorseTask<T>[] tasks)
+        {
+            while (!tasks.Any(task => task.IsComplete))
+            {
+                foreach (var task in tasks)
+                    task.UpdateTaskStatus();
+            }
+
+            return tasks.First(task => task.IsComplete);
         }
     }
 }

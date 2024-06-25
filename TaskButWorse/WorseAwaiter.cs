@@ -14,14 +14,14 @@ namespace TaskButWorse
 
         public void OnCompleted(Action continuation)
         {
-            while (_task.Status != TaskStatus.Completed && _task.Status != TaskStatus.Faulted) { _task.UpdateTaskStatus(); }
+            while (!_task.IsComplete) { _task.UpdateTaskStatus(); }
 
             continuation();
         }
 
         public void GetResult()
         {
-            while (_task.Status != TaskStatus.Completed && _task.Status != TaskStatus.Faulted) { _task.UpdateTaskStatus(); }
+            while (!_task.IsComplete) { _task.UpdateTaskStatus(); }
 
             if (_task.Exception is not null)
                 throw _task.Exception;
@@ -40,14 +40,14 @@ namespace TaskButWorse
 
         public void OnCompleted(Action continuation)
         {
-            while (_task.Status != TaskStatus.Completed && _task.Status != TaskStatus.Faulted) { _task.UpdateTaskStatus(); }
+            while (!_task.IsComplete) { _task.UpdateTaskStatus(); }
 
             continuation();
         }
 
         public T? GetResult()
         {
-            while (_task.Status != TaskStatus.Completed && _task.Status != TaskStatus.Faulted) { _task.UpdateTaskStatus(); }
+            while (!_task.IsComplete) { _task.UpdateTaskStatus(); }
 
             if (_task.Exception is not null)
                 throw _task.Exception;
