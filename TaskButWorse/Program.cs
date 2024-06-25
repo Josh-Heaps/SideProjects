@@ -1,14 +1,16 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using TaskButWorse;
-WorseTask t = new();
-t.Run(() =>
+
+int result = await WorseTask<int>.Run(() =>
 {
+    int result = 0;
     for (int i = 0; i < 10; i++)
     {
-        Thread.Sleep(10);
-        Console.WriteLine(i);
+        result += i;
+        Thread.Sleep(100);
     }
+    return result;
 });
 
-await t;
+Console.WriteLine(result);
 Console.WriteLine("Next stuff");
