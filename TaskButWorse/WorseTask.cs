@@ -61,15 +61,18 @@
                 Status = TaskStatus.Completed;
         }
 
-        public static WorseTask WhenAny(params WorseTask[] tasks)
+        public static WorseTask<WorseTask> WhenAny(params WorseTask[] tasks)
         {
-            while (!tasks.Any(task => task.IsComplete))
+            return WorseTask<WorseTask>.Run(() =>
             {
-                foreach (var task in tasks)
-                    task.UpdateTaskStatus();
-            }
+                while (!tasks.Any(task => task.IsComplete))
+                {
+                    foreach (var task in tasks)
+                        task.UpdateTaskStatus();
+                }
 
-            return tasks.First(task => task.IsComplete);
+                return tasks.First(task => task.IsComplete);
+            });
         }
 
         public static WorseTask<IEnumerable<WorseTask>> WhenAll(params WorseTask[] tasks)
@@ -156,15 +159,18 @@
                 Status = TaskStatus.Completed;
         }
 
-        public static WorseTask<T> WhenAny(params WorseTask<T>[] tasks)
+        public static WorseTask<WorseTask<T>> WhenAny(params WorseTask<T>[] tasks)
         {
-            while (!tasks.Any(task => task.IsComplete))
+            return WorseTask<WorseTask<T>>.Run(() =>
             {
-                foreach (var task in tasks)
-                    task.UpdateTaskStatus();
-            }
+                while (!tasks.Any(task => task.IsComplete))
+                {
+                    foreach (var task in tasks)
+                        task.UpdateTaskStatus();
+                }
 
-            return tasks.First(task => task.IsComplete);
+                return tasks.First(task => task.IsComplete);
+            });
         }
 
         public static WorseTask<IEnumerable<WorseTask<T>>> WhenAll(params WorseTask<T>[] tasks)
