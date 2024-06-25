@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace TaskButWorse
+﻿namespace WorseTask
 {
     public enum TaskStatus
     {

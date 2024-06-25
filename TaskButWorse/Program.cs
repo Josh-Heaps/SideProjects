@@ -1,5 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-using TaskButWorse;
+﻿using WorseTask;
 
 int result = await WorseTask<int>.Run(() =>
 {
@@ -14,3 +13,4 @@ int result = await WorseTask<int>.Run(() =>
 
 Console.WriteLine(result);
 Console.WriteLine("Next stuff");
+
