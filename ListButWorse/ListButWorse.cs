@@ -48,12 +48,41 @@ namespace ListButWorse
             }
         }
 
+        public static ListButWorse<T> operator +(ListButWorse<T> list, T value) { list.Add(value); return list; }
+        public static ListButWorse<T> operator +(ListButWorse<T> listOne, ListButWorse<T> listTwo)
+        {
+            ListButWorse<T> result = new(listOne);
+            result.AddRange(listTwo);
+
+            return result;
+        }
+
+        public static ListButWorse<T> operator -(ListButWorse<T> list, T value) { list.Remove(value); return list; }
+
         public void Add(T item)
         {
             ArgumentNullException.ThrowIfNull(item);
             _values ??= _emptyArray;
             IncreaseSizeIfNeeded();
             _values[Count++] = item;
+        }
+
+        public void AddRange(IEnumerable<T> collection)
+        {
+            ArgumentNullException.ThrowIfNull(collection);
+
+            if (collection is ICollection<T> c)
+            {
+                IncreaseSizeIfNeeded(c.Count);
+                c.CopyTo(_values, Count);
+
+                return;
+            }
+
+            var enumerator = collection.GetEnumerator();
+
+            while (enumerator.MoveNext())
+                Add(enumerator.Current);
         }
 
         public void Clear()
@@ -144,14 +173,18 @@ namespace ListButWorse
             }
         }
 
-        private void IncreaseSizeIfNeeded()
+        private void IncreaseSizeIfNeeded(int requiredCapacity = 1)
         {
-            if (Count == _values.Length)
+            requiredCapacity += Count;
+
+            if (requiredCapacity >= _values.Length)
             {
                 int newSize = Count * 2 > 0 ? Count * 2 : 1;
 
                 if (newSize > Array.MaxLength)
                     newSize = Array.MaxLength;
+
+                newSize = Math.Max(newSize, requiredCapacity);
 
                 T[] values = new T[newSize];
                 Array.Copy(_values, values, _values.Length);

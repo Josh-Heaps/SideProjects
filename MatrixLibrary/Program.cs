@@ -1,7 +1,7 @@
 ﻿using MatrixLibrary;
 using System.Diagnostics;
 
-int matrixSize = 1005;
+int matrixSize = 10;
 int incrementer = 0;
 
 Matrix<double> matrixOne = new(matrixSize, matrixSize);
@@ -20,7 +20,7 @@ for (int i = 0; i < matrixSize; i++)
 }
 
 Stopwatch stopwatch = Stopwatch.StartNew();
-Run();
+Run(true);
 stopwatch.Stop();
 Console.WriteLine("Test run over. Starting actual test.");
 
@@ -38,14 +38,9 @@ void Run(bool printResults = false)
 
     stopwatch.Stop();
 
-    resultMatrix++;
-    resultMatrix--;
-    resultMatrix *= 2;
-    resultMatrix *= 0.5;
-
     string[,] resultStrings = resultMatrix.GetFormattedValues(4);
 
-    Console.WriteLine("Elapsed Seconds: " + (double)stopwatch.ElapsedTicks / (double)10000000);
+    Console.WriteLine("Elapsed Time (HH:MM:SS.SSSSSSS): " + stopwatch.Elapsed);
     
     if (printResults)
         PrintResult(resultStrings);

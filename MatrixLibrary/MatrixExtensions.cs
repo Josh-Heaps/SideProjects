@@ -188,6 +188,7 @@ namespace MatrixLibrary
         public static T[,] Add(T[,] matrix, T scalar)
         {
             ArgumentNullException.ThrowIfNull(matrix);
+            ArgumentNullException.ThrowIfNull(scalar);
 
             int firstMatrixRowCount = matrix.GetLength(0);
             int firstMatrixColumnCount = matrix.GetLength(1);
@@ -216,8 +217,11 @@ namespace MatrixLibrary
         public static T[][] Add(T[][] matrix, T scalar)
         {
             ArgumentNullException.ThrowIfNull(matrix);
+            ArgumentNullException.ThrowIfNull(scalar);
+            T[,] convertedMatrix = ConvertToTwoDimensionalArray(matrix);
+            T[,] resultMatrix = Add(convertedMatrix, scalar);
 
-            return ConvertToArrayOfArrays(Add(ConvertToTwoDimensionalArray(matrix), scalar));
+            return ConvertToArrayOfArrays(resultMatrix);
         }
 
         /// <summary>
@@ -270,6 +274,8 @@ namespace MatrixLibrary
         public static T[,] Subtract(T[,] matrix, T scalar)
         {
             ArgumentNullException.ThrowIfNull(matrix);
+            ArgumentNullException.ThrowIfNull(scalar);
+
             return Add(matrix, -scalar);
         }
 
