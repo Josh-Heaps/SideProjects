@@ -1,26 +1,16 @@
 ﻿using ServiceCollectionButWorse;
+using ServiceCollectionButWorse.TestTypes;
 
 var collection = new WorseServiceCollection();
 
-collection.AddService<A>();
-collection.AddService<B>();
-collection.AddService<C>();
-collection.AddService<D>();
-collection.AddService<E>();
-collection.AddService<F>();
-collection.AddService<G>();
-collection.AddService<H>();
-collection.AddService<I>();
-collection.AddService<J>();
+collection.AddService<EquationBuilder>();
+collection.AddService<EquationExecutor>();
+collection.AddService<EquationRunner>();
+collection.AddService<FirstNumber>();
+collection.AddService<Operator>();
+collection.AddService<SecondNumber>();
 
-var h = collection.GetService<H>();
-h.Print();
-
-try
-{
-    var i = collection.GetService<I>();
-}
-catch (Exception e)
-{
-    Console.WriteLine(e.Message);
-}
+var firstNumber = collection.GetService<FirstNumber>();
+firstNumber.Value = 2;
+var runner = collection.GetService<EquationRunner>();
+runner.Run();
